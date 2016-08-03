@@ -13,6 +13,7 @@ class Config:
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKY_MAIL_SENDER = 'conan582905668 <conan582905668@qq.com>'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    SQLALCHEMY_TRACK_MODIFICATIONS = True  # 这个是pycharm建议加的，说是这项配置在未来的版本中会被默认为禁止状态，把它设置为True即可取消warning
 
     @staticmethod
     def init_app(app):
