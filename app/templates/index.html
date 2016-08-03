@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+<!--{% import "bootstrap/wtf.html" as wtf %}-->
 
 
 {% block title %}首页 {% endblock %}
@@ -14,14 +14,15 @@
 <!--{% endif %}-->
 <!--</div>-->
 <div class="page-header">
-    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
-    <!--下面的是另一行文字，跟上一行无关-->
-    {% if not known %}
-    <p>Pleased to meet you!</p>
-    {% else %}
-    <p>Happy to see you again!</p>
-    {% endif %}
+    <!--<h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>-->
+    <!--&lt;!&ndash;下面的是另一行文字，跟上一行无关&ndash;&gt;-->
+    <!--{% if not known %}-->
+    <!--<p>Pleased to meet you!</p>-->
+    <!--{% else %}-->
+    <!--<p>Happy to see you again!</p>-->
+    <!--{% endif %}-->
+     <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 </div>
-{{ wtf.quick_form(form) }}
+<!--{{ wtf.quick_form(form) }}-->
 
 {% endblock %}
