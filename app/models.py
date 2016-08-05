@@ -2,6 +2,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import db, login_manager
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 
 class Role(db.Model):
@@ -22,6 +24,9 @@ class User(UserMixin,db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
+    confirmed = db.Column(db.Boolean, default=False)
+
+# 以下内容是用来生成密码散列值的
 
     @property
     def password(self):  # 若尝试读取password的值会返回属性错误，因为生成了散列值后不能还原
@@ -33,6 +38,24 @@ class User(UserMixin,db.Model):
 
     def verify_password(self, password):  # 验证输入的散列值，对的话返回True
         return check_password_hash(self.password_hash, password)
+
+# 以下内容是用来确认账户的
+
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.id})
+
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True  # 检验通过即把新添加的confirmed属性设为True
 
     def __repr__(self):
         return '<User %r>' % self.username
