@@ -1,16 +1,18 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}Flasky {% endblock %}
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
-<!--以上部分是为了添加图标-->
+<!--下面是导航栏-->
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
+        <!--这个div就是导航栏的容器，下面几个是其中的成分，其中第一个div是主要的标题，剩下的是扩展的-->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -18,18 +20,31 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Flasky</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Flasky</a>
         </div>
+        <!--第二个导航栏标签，包括左右两个列表-->
         <div class="navbar-collapse collapse">
+            <!--左边这个列表有两个内容，分别是home和profile-->
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
-                 {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
                 {% endif %}
             </ul>
+            <!--右边的这个列表就是一个下拉框，必须是认证用户才能看见，有头像和account字样，点击后显示下拉框-->
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{{ current_user.gravatar(size=18) }}">
+                        Account <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!--此处是一个下拉框，本来应该还有两列分别是修改密码和修改邮箱的，但是省去了-->
+
+                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                    </ul>
+                </li>
                 {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
                 {% endif %}
@@ -38,14 +53,22 @@
     </div>
 </div>
 {% endblock %}
-
+<!--网页内容部分，但是上面的先是flash的内容-->
 {% block content %}
 <div class="container">
-    {% block page_content %}你们好{% endblock %}
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+<!--这下面是页面正文-->
+    {% block page_content %}{% endblock %}
 </div>
 {% endblock %}
-
+<!--下面导入moment.js库-->
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
 {% endblock %}
+
