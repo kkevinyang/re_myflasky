@@ -22,7 +22,7 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role')
+    users = db.relationship('User', backref='role')  # 并不会在数据库表中显示
 
     @staticmethod  # 为了不让实例和类参与，用到静态方法
     def insert_roles():
@@ -64,6 +64,7 @@ class User(UserMixin,db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -148,3 +149,11 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader  # 此乃回调函数，用来加载用户，不然就会提示User没有登陆激活了（'User' object has no attribute 'is_active'）
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)  # 有默认值
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))

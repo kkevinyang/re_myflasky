@@ -1,28 +1,32 @@
 {% extends "base.html" %}
-<!--{% import "bootstrap/wtf.html" as wtf %}-->
+{% import "bootstrap/wtf.html" as wtf %}
 
 
 {% block title %}首页 {% endblock %}
 
 {% block page_content %}
-
-<!--<div class="page-header">-->
-<!--{% if name %}-->
-<!--<h1> Hello,{{ name }}! </h1>-->
-<!--{% else %}-->
-<!--<h1>Hello,Stranger!</h1>-->
-<!--{% endif %}-->
-<!--</div>-->
 <div class="page-header">
-    <!--<h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>-->
-    <!--&lt;!&ndash;下面的是另一行文字，跟上一行无关&ndash;&gt;-->
-    <!--{% if not known %}-->
-    <!--<p>Pleased to meet you!</p>-->
-    <!--{% else %}-->
-    <!--<p>Happy to see you again!</p>-->
-    <!--{% endif %}-->
      <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 </div>
-<!--{{ wtf.quick_form(form) }}-->
-
+<div>
+    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date">{{ moment(post.timestamp).fromNow() }}</div>
+            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+            <div class="post-body">{{ post.body }}</div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
