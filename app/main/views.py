@@ -33,15 +33,16 @@ def index():
 #             session['known'] = True
 #         session['name'] = form.name.data
 #         return redirect(url_for('.index'))  # 获取index（）视图函数的地址 注意前面有个点是省略的蓝本名字'main'
-    return render_template('index.html',
-                           form=form, name=session.get('name'),
-                           known=session.get('known', False))
+#     return render_template('index.html',
+#                            form=form, name=session.get('name'),
+#                            known=session.get('known', False))
 
 
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()  # 非常简洁的写法
-    return render_template('user.html', user=user)
+    posts = user.posts.order_by(Post.timestamp.desc()).all()
+    return render_template('user.html', user=user, posts=posts)
 
 # 资料编辑
 
