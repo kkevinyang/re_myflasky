@@ -1,1 +1,3 @@
 -r common.txt
+psycopg2==2.4.4
+Flask-SSLify==0.1.4
