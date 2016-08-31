@@ -26,11 +26,6 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
-
-if __name__ == '__main__':
-    manager.run()
-
-
 @manager.command
 def deploy():
     """Run deployment tasks."""
@@ -45,4 +40,11 @@ def deploy():
 
     # create self-follows for all users
     # User.add_self_follows()
+    
+
+if __name__ == '__main__':
+    manager.run()
+
+
+
 
