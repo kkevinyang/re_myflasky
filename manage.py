@@ -41,7 +41,6 @@ def deploy():
     # create self-follows for all users
     # User.add_self_follows()
     
-
 if __name__ == '__main__':
     manager.run()
 
