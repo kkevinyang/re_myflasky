@@ -1,6 +1,6 @@
 <ul class="posts">
     {% for post in posts %}
-    <li class="post shadow frame">
+    <li class="post">
         <!--作者头像,链接在用户资料页-->
         <div class="post-thumbnail">
             <a href="{{ url_for('.user', username=post.author.username) }}">
