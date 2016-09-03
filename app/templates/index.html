@@ -1,25 +1,66 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
-
-{% block title %}首页 {% endblock %}
-
+<!--首页标题-->
+{% block title %}YK's Blog {% endblock %}
+<!--页面内容-->
 {% block page_content %}
-<div class="page-header">
-     <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+<!--博客欢迎头-->
+<div class="page-header text-center bg-2">
+      <h1>Welcome to YK's Blog!</h1>
+      <img src="{{ url_for('static', filename = 'dog.gif') }}" class="me-img img-responsive img-circle margin" alt="me">
+      <h2>I'm Kkevinyang, a self-taught developer.</h2>
 </div>
-<div>
-    {% if current_user.can(Permission.WRITE_ARTICLES) %}
-    {{ wtf.quick_form(form) }}
+{% endblock %}
+<!--文章区内容-->
+{% block post_content %}
+<div class="container">
+    <!--新来访者提示-->
+    {% if not current_user.is_authenticated %}
+    <div class="jumbotron">
+        <h1>Hello,Stranger!</h1>
+        <p>
+         This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
+        </p>
+        <p>
+         <a class="btn btn-primary btn-large" href="{{ url_for('auth.register') }}">Register</a>
+        </p>
+    </div>
     {% endif %}
 </div>
-{% include '_posts.html' %}
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.index') }}
+<!--提交文章表单-->
+<div class="container">
+  <div class="row">
+      <!--左边分栏-->
+    <div class="col-md-9">
+      <div class="post">
+        <div class="post-tabs">
+          <div>
+                {% if current_user.can(Permission.WRITE_ARTICLES) %}
+                {{ wtf.quick_form(form) }}
+                {% endif %}
+          </div>
+            <!--文章列表-->
+          {% include '_posts.html' %}
+        </div>
+      </div>
+        <!--导航栏-->
+	  {% if pagination %}
+      <div class="pagination text-center">
+        {{ macros.pagination_widget(pagination, '.index') }}
+      </div>
+      {% endif %}
+    </div>
+      <!--右边分栏-->
+    <div class="col-md-3">
+      <div class="subscribe shadow frame" data-spy="affix" data-offset-top="611">
+        <h3><b><span class="glyphicon glyphicon-pushpin"></span> 订阅我的博客 </b></h3>
+      </div>
+    </div>
+  </div>
 </div>
-{% endif %}
 {% endblock %}
+
 <!--pagedown模板声明-->
 {% block scripts %}
 {{ super() }}
