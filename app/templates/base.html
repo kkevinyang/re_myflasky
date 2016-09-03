@@ -88,6 +88,7 @@
 <!--下面导入moment.js库-->
 {% block scripts %}
 {{ super() }}
+{{ moment.include_moment() }}
 <script  type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.autosize.min.js') }}"></script>
 <script>
     $(function(){

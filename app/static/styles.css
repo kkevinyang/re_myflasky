@@ -40,36 +40,41 @@ form {
 }
 /*文章*/
 div.post-tabs {
-    margin-top: 0px;
+    margin-top: 16px;
 }
 ul.posts {
     list-style-type: none;
     padding: 0px;
+    margin: 16px 0px 0px 0px;
+    border-top: 1px solid #e0e0e0;
 }
 div.post-tabs ul.posts {
-    margin: 10px 0px;
+    margin: 0px;
     border-top: none;
 }
 ul.posts li.post {
-    padding: 30px 20px 20px;
-    border: 1px solid #e0e0e0;
-	margin-bottom: 30px;
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
 }
 ul.posts li.post:hover {
-    box-shadow: rgb(108, 105, 105) 5px 5px 20px;
+    background-color: #f0f0f0;
+}
+div.post-date {
+    float: right;
+}
+div.post-author {
+    font-weight: bold;
 }
 div.post-thumbnail {
     position: absolute;
 }
 div.post-content {
-    margin: 35px;
+    margin-left: 48px;
     min-height: 48px;
 }
-.post-body {
-    /*border-top: 4px solid #e0e0e0;*/
-	margin-top: 40px
+div.post-footer {
+    text-align: right;
 }
-
 /*評論*/
 ul.comments {
     list-style-type: none;
@@ -149,8 +154,9 @@ div.flask-pagedown-preview h3 {
 	width: 200;
 	height: 200;
 }
-img {
-    width: 60%;
+.post-body img {
+    width: 90%;
     height: auto;
     max-width: 750px;
+
 }
